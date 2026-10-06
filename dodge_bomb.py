@@ -31,6 +31,12 @@ def check_bound(rect: pg.Rect) -> tuple[bool, bool]:
 
 #追加機能１
 def gameover(screen: pg.Surface) -> None:
+    """
+    追加機能1: こうかとんに爆弾が衝突した際にゲームオーバー画面を表示する関数
+
+    引数:
+        screen (pg.Surface): 描画先のメイン画面Surface
+    """
     black_sfc = pg.Surface((WIDTH, HEIGHT))
     black_sfc.set_alpha(160)
     pg.draw.rect(black_sfc, (0, 0, 0), (0, 0, WIDTH, HEIGHT))
@@ -53,6 +59,12 @@ def gameover(screen: pg.Surface) -> None:
 
 #追加機能２
 def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
+    """
+    追加機能2: 時間経過に伴い拡大する爆弾Surfaceリストと加速度リストを生成する関数
+
+    戻り値:
+        tuple[list[pg.Surface], list[int]]: 爆弾Surfaceリストと加速度リストのタプル
+    """
     bb_imgs = []
     bb_accs = [a for a in range(1, 11)]
 
@@ -66,6 +78,12 @@ def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
 
 #追加機能３
 def get_kk_imgs() -> dict[tuple[int, int], pg.Surface]:
+    """
+    追加機能3: 移動量の合計タプルに対応する回転・反転後のこうかとん画像Surfaceの辞書を生成する関数
+
+    戻り値:
+        dict[tuple[int, int], pg.Surface]: 移動量タプルをキー、画像Surfaceを値とした辞書
+    """
     kk_base = pg.image.load("fig/3.png")
     kk_flip = pg.transform.flip(kk_base, True, False)  # 左右反転画像
 
@@ -86,6 +104,17 @@ def get_kk_imgs() -> dict[tuple[int, int], pg.Surface]:
 def calc_orientation(
     org: pg.Rect, dst: pg.Rect, current_xy: tuple[float, float]
 ) -> tuple[float, float]:
+    """
+    追加機能4: 爆弾がこうかとんに向かう追従速度ベクトル(vx, vy)を計算する関数
+
+    引数:
+        org (pg.Rect): 爆弾のRect
+        dst (pg.Rect): こうかとんのRect
+        current_xy (tuple[float, float]): 現在の爆弾の速度ベクトル (vx, vy)
+
+    戻り値:
+        tuple[float, float]: 正規化・調整後の速度ベクトル (vx, vy)
+    """
     dx = dst.centerx - org.centerx
     dy = dst.centery - org.centery
     dist = math.sqrt(dx**2 + dy**2)
