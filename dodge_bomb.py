@@ -64,6 +64,7 @@ def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
 
     return bb_imgs, bb_accs
 
+#追加機能３
 def get_kk_imgs() -> dict[tuple[int, int], pg.Surface]:
     kk_base = pg.image.load("fig/3.png")
     kk_flip = pg.transform.flip(kk_base, True, False)  # 左右反転画像
@@ -80,6 +81,22 @@ def get_kk_imgs() -> dict[tuple[int, int], pg.Surface]:
         (-5, +5): pg.transform.rotozoom(kk_base, 45, 0.9),  # 左下
     }
     return kk_dict
+
+#追加機能４
+def calc_orientation(
+    org: pg.Rect, dst: pg.Rect, current_xy: tuple[float, float]
+) -> tuple[float, float]:
+    dx = dst.centerx - org.centerx
+    dy = dst.centery - org.centery
+    dist = math.sqrt(dx**2 + dy**2)
+
+    if dist < 300 or dist == 0:
+        return current_xy
+
+    norm = math.sqrt(50)
+    vx = (dx / dist) * norm
+    vy = (dy / dist) * norm
+    return vx, vy
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -143,6 +160,8 @@ def main():
         center = bb_rct.center
         bb_rct = bb_img.get_rect()
         bb_rct.center = center
+
+        vx, vy = calc_orientation(bb_rct, kk_rct, (vx, vy))
 
         acc = bb_accs[idx]
         avx = vx * (acc / 1.0)
