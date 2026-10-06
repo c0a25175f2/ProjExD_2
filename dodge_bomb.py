@@ -26,7 +26,7 @@ def check_bound(rect: pg.Rect) -> tuple[bool, bool]:
     if rect.top < 0 or HEIGHT < rect.bottom:  # 縦方向判定
         tate = False
     return yoko, tate
-    
+
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -49,6 +49,10 @@ def main():
             if event.type == pg.QUIT: 
                 return
         screen.blit(bg_img, [0, 0]) 
+
+        if kk_rct.colliderect(bb_rct):  # 練習4：kkとbbのrectが重なっていたら
+            print("game over")
+            return
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
