@@ -1,6 +1,8 @@
 import os
+import math
 import random
 import sys
+import time
 import pygame as pg
 
 
@@ -18,7 +20,7 @@ def check_bound(rect: pg.Rect) -> tuple[bool, bool]:
     """
     引数：こうかとんまたは爆弾のRect
     戻り値：タプル（横方向判定結果，縦方向判定結果）
-    画面内ならTrue／画面外ならFalse
+    画面内ならTrue,画面外ならFalse
     """
     yoko, tate = True, True
     if rect.left < 0 or WIDTH < rect.right:  # 横方向判定
@@ -26,6 +28,28 @@ def check_bound(rect: pg.Rect) -> tuple[bool, bool]:
     if rect.top < 0 or HEIGHT < rect.bottom:  # 縦方向判定
         tate = False
     return yoko, tate
+
+#追加機能１
+def gameover(screen: pg.Surface) -> None:
+    black_sfc = pg.Surface((WIDTH, HEIGHT))
+    black_sfc.set_alpha(160)
+    pg.draw.rect(black_sfc, (0, 0, 0), (0, 0, WIDTH, HEIGHT))
+
+    font = pg.font.Font(None, 80)
+    txt_sfc = font.render("Game Over", True, (255, 255, 255))
+    txt_rct = txt_sfc.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+
+    kk_img = pg.image.load("fig/8.png")
+    kk_rct_l = kk_img.get_rect(center=(WIDTH // 2 - 200, HEIGHT // 2))
+    kk_rct_r = kk_img.get_rect(center=(WIDTH // 2 + 200, HEIGHT // 2))
+
+    screen.blit(black_sfc, (0, 0))
+    screen.blit(txt_sfc, txt_rct)
+    screen.blit(kk_img, kk_rct_l)
+    screen.blit(kk_img, kk_rct_r)
+    pg.display.update()
+
+    time.sleep(5)
 
 
 def main():
@@ -50,8 +74,8 @@ def main():
                 return
         screen.blit(bg_img, [0, 0]) 
 
-        if kk_rct.colliderect(bb_rct):  # 練習4：kkとbbのrectが重なっていたら
-            print("game over")
+        if kk_rct.colliderect(bb_rct):
+            gameover(screen)
             return
 
         key_lst = pg.key.get_pressed()
