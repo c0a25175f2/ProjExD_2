@@ -51,6 +51,18 @@ def gameover(screen: pg.Surface) -> None:
 
     time.sleep(5)
 
+#追加機能２
+def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
+    bb_imgs = []
+    bb_accs = [a for a in range(1, 11)]
+
+    for r in range(1, 11):
+        bb_img = pg.Surface((20 * r, 20 * r))
+        pg.draw.circle(bb_img, (255, 0, 0), (10 * r, 10 * r), 10 * r)
+        bb_img.set_colorkey((0, 0, 0))  # 黒い背景部分を透過
+        bb_imgs.append(bb_img)
+
+    return bb_imgs, bb_accs
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -65,6 +77,12 @@ def main():
     bb_rct = bb_img.get_rect()
     bb_rct.centerx = random.randint(0, WIDTH)  # 横座標用の乱数
     bb_rct.centery = random.randint(0, HEIGHT)  # 縦座標用の乱数
+    bb_imgs, bb_accs = init_bb_imgs()
+    bb_img = bb_imgs[0]
+    bb_rct = bb_img.get_rect()
+    bb_rct.centerx = random.randint(0, WIDTH)
+    bb_rct.centery = random.randint(0, HEIGHT)
+
     vx, vy = +5, +5  # 練習2：爆弾の初期速度
     clock = pg.time.Clock()
     tmr = 0
@@ -95,6 +113,19 @@ def main():
         kk_rct.move_ip(sum_mv)
         if check_bound(kk_rct) != (True, True):  # どこからしらはみ出てる
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])  # 先程の動きをキャンセルする
+
+        idx = min(tmr // 500, 9)
+        bb_img = bb_imgs[idx]
+        center = bb_rct.center
+        bb_rct = bb_img.get_rect()
+        bb_rct.center = center
+
+        acc = bb_accs[idx]
+        avx = vx * (acc / 1.0)
+        avy = vy * (acc / 1.0)
+
+        bb_rct.move_ip(avx, avy)
+
         screen.blit(kk_img, kk_rct)
 
         bb_rct.move_ip(vx, vy)  # 練習2：爆弾動く
