@@ -177,6 +177,7 @@ def main():
             if key_lst[k]:
                 sum_mv[0] += tpl[0]  # 横方向移動量
                 sum_mv[1] += tpl[1]  # 縦方向移動量
+
         kk_rct.move_ip(sum_mv)
         if check_bound(kk_rct) != (True, True):  # どこからしらはみ出てる
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])  # 先程の動きをキャンセルする
@@ -198,9 +199,6 @@ def main():
 
         bb_rct.move_ip(avx, avy)
 
-        screen.blit(kk_img, kk_rct)
-
-        bb_rct.move_ip(vx, vy)  # 練習2：爆弾動く
         yoko, tate = check_bound(bb_rct)
         if not yoko:  # yoko == False
             vx *= -1
