@@ -140,11 +140,15 @@ def main():
     bb_rct = bb_img.get_rect()
     bb_rct.centerx = random.randint(0, WIDTH)  # 横座標用の乱数
     bb_rct.centery = random.randint(0, HEIGHT)  # 縦座標用の乱数
+
+    #追加機能２
     bb_imgs, bb_accs = init_bb_imgs()
     bb_img = bb_imgs[0]
     bb_rct = bb_img.get_rect()
     bb_rct.centerx = random.randint(0, WIDTH)
     bb_rct.centery = random.randint(0, HEIGHT)
+    
+    #追加機能３
     kk_imgs = get_kk_imgs()
     kk_img = kk_imgs[(0, 0)]
     kk_rct = kk_img.get_rect()
